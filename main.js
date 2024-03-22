@@ -1,8 +1,10 @@
 var canvas = document.createElement("canvas");
+canvas.id = "Game";
 var ctx = canvas.getContext("2d");
 canvas.width = 1000;
 canvas.height = 659;
 var countDown = 3;
+var continueGame = true;
 document.body.appendChild(canvas);
 
 var bgReady = false;
@@ -174,8 +176,15 @@ var main = function () {
     update(delta / 1000);
     render();
     then = now;
-    //
-    requestAnimationFrame(main);
+    if (!continueGame) {
+        document.getElementById("Game").remove();
+        var endMessage = document.createElement("h1");
+        endMessage.innerText = "YOU DIED";
+        document.body.appendChild(endMessage);
+    }
+    else {
+        requestAnimationFrame(main);
+    }
 };
 //To continuously call the main game loop function, this tutorial used to execute
 //the setInterval method. These days there's a better way, via
@@ -204,4 +213,7 @@ var render = function () {
 main();
 window.setInterval(function() {
     countDown -= 1;
+    if (countDown == 0) {
+        continueGame = false;
+    }
 }, 1000)
